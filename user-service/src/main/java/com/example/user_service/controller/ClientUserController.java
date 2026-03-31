@@ -22,7 +22,7 @@ public class ClientUserController {
     }
 
     @PutMapping
-    @RequestMapping("{/cpf}")
+    @RequestMapping("/{cpf}")
     public ResponseEntity<ClientUser> updateClient(@PathVariable String cpf, @RequestBody ClientUser usuario){
         String cpfLimpo = cpf.replaceAll("[^0-9]", "");
         return ResponseEntity.ok(service.atualizarPorCpf(cpfLimpo, usuario));

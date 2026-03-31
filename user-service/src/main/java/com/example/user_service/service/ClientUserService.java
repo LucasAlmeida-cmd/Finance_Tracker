@@ -19,15 +19,15 @@ public class ClientUserService {
         return repository.save(cliente);
     }
 
-    public ClientUser atualizarPorCpf(String cpf, ClientUser cliente){
-        ClientUser clienteBanco = repository.findbByCpf(cpf);
-        if (clienteBanco == null){
-            throw new UsuarioNotFoundByCpfException(cpf);
-        }
+    public ClientUser atualizarPorCpf(String cpf, ClientUser cliente) {
+        ClientUser clienteBanco = repository.findByCpf(cpf)
+                .orElseThrow(() -> new UsuarioNotFoundByCpfException(cpf));
+
         clienteBanco.setCpf(cliente.getCpf());
         clienteBanco.setEmail(cliente.getEmail());
-        clienteBanco.setData_aniversario(cliente.getData_aniversario());
+        clienteBanco.setDataAniversario(cliente.getDataAniversario());
         clienteBanco.setNome(cliente.getNome());
+
         return repository.save(clienteBanco);
     }
 }

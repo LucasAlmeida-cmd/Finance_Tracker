@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface ClientUserRepository extends JpaRepository<ClientUser,UUID > {
 
-    ClientUser findbByCpf(String cpf);
+    Optional<ClientUser> findByCpf(String cpf);
 }

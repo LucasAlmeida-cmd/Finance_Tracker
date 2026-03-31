@@ -1,29 +1,37 @@
 package com.example.user_service.model;
 
+import com.example.user_service.exceptions.CpfInvalidException;
+import com.example.user_service.exceptions.CpfNotNullException;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.UUID;
 
 @Entity
-@Table (name = "tb_clintuser")
+@Table (name = "tb_clientuser")
 @Getter
 @Setter
 @DiscriminatorValue("CLIENTE")
 @PrimaryKeyJoinColumn(name = "id_cliente", referencedColumnName = "id")
-public class ClientUser extends User {
+public class    ClientUser extends User {
 
     @Column(name = "cpf_user", nullable = false, length = 100, unique = true)
     private String cpf;
 
-    private LocalDate data_aniversario;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Column(name = "data_aniversario_usuario", nullable = false)
+    private LocalDate dataAniversario;
 
 
-    public ClientUser(UUID id, String nome, String email, Roles role, String cpf, LocalDate data_aniversario) {
+
+    public ClientUser(UUID id, String nome, String email, Roles role, String cpf, LocalDate dataAniversario) {
         super(id, nome, email, role);
-        this.data_aniversario = data_aniversario;
+        this.dataAniversario = dataAniversario;
         setCpfUser(cpf);
     }
 
@@ -32,11 +40,11 @@ public class ClientUser extends User {
 
     public void setCpfUser(String cpf) {
         if (cpf == null) {
-            throw new IllegalArgumentException("CPF não pode ser nulo");
+            throw new CpfNotNullException();
         }
         String cpfNumerico = cpf.replaceAll("[^0-9]", "");
         if (!validarCpf(cpfNumerico)) {
-            throw new IllegalArgumentException("CPF inválido");
+            throw new CpfInvalidException();
         }
         this.cpf = cpfNumerico;
     }
