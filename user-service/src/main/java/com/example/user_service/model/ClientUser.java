@@ -15,7 +15,7 @@ import java.util.UUID;
 @PrimaryKeyJoinColumn(name = "id_cliente", referencedColumnName = "id")
 public class ClientUser extends User {
 
-    @Column(name = "cpf_user", nullable = false, length = 100)
+    @Column(name = "cpf_user", nullable = false, length = 100, unique = true)
     private String cpf;
 
     private LocalDate data_aniversario;
