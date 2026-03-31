@@ -15,7 +15,7 @@ import java.util.UUID;
 @Getter
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @AllArgsConstructor
-public class User {
+public abstract class User {
 
     @Id
     private UUID id;
@@ -33,7 +33,5 @@ public class User {
     }
 
 
-//    @Column(name = "cpf_user", nullable = false, length = 100)
-//    private String cpf;
-//    private LocalDate data_aniversario;
+
 }
