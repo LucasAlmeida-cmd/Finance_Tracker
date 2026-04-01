@@ -16,12 +16,10 @@ public class AdminUserService {
 
     @Autowired
     private AdminUserRepository adminUserRepository;
-    @Autowired
-    private ClientUserRepository clientUserRepository;
-
 
     public AdminUser adicionarAdmin(AdminUser adminUser){
         adminUser.setRole(Roles.ADMIN);
+        adminUser.setIdentificacao(UUID.randomUUID());
         return adminUserRepository.save(adminUser);
     }
 

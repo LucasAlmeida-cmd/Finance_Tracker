@@ -4,6 +4,7 @@ import com.example.user_service.exceptions.UsuarioNotFoundByCpfException;
 import com.example.user_service.model.ClientUser;
 import com.example.user_service.model.Roles;
 import com.example.user_service.repository.ClientUserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class ClientUserService {
     }
 
 
-
+    @Transactional
     public void removerClientPorCpf(String cpf){
         String cpfNumerico = cpf.replaceAll("[^0-9]", "");
         ClientUser clienteBanco = repository.findByCpf(cpfNumerico)

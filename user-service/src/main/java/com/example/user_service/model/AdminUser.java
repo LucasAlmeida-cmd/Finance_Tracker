@@ -1,6 +1,7 @@
 package com.example.user_service.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,11 @@ import java.util.UUID;
 @Setter
 @DiscriminatorValue("ADMIN")
 @PrimaryKeyJoinColumn(name = "id_admin", referencedColumnName = "id")
+@AllArgsConstructor
 public class AdminUser extends User{
     @Column(name = "identi_admin", length = 100, unique = true)
     private UUID identificacao;
+
+    public AdminUser() {
+    }
 }
