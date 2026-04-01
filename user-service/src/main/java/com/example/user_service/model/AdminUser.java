@@ -14,5 +14,5 @@ import java.util.UUID;
 @PrimaryKeyJoinColumn(name = "id_admin", referencedColumnName = "id")
 public class AdminUser extends User{
     @Column(name = "identi_admin", length = 100, unique = true)
-    private UUID indentificacao;
+    private UUID identificacao;
 }
