@@ -1,7 +1,7 @@
 package com.example.user_service.service;
 
-import com.example.user_service.exceptions.AdminNotFoundByIdentificaçãoException;
-import com.example.user_service.exceptions.AdminNotFoundByIndentificacaoException;
+import com.example.user_service.exceptions.AdminNotFoundByIdentificacaoException;
+import com.example.user_service.exceptions.UsuarioNotFoundByCpfException;
 import com.example.user_service.model.AdminUser;
 import com.example.user_service.model.ClientUser;
 import com.example.user_service.model.Roles;
@@ -21,15 +21,15 @@ public class AdminUserService {
     @Autowired
     private ClientUserRepository clientUserRepository;
 
-    /// Admin
+
     public AdminUser adicionarAdmin(AdminUser adminUser){
         adminUser.setRole(Roles.ADMIN);
         return adminUserRepository.save(adminUser);
     }
 
-    public AdminUser atualizarAdmin(UUID identificação, AdminUser adminUser){
-        AdminUser adminBanco = adminUserRepository.findByIdentificacao(identificação)
-                .orElseThrow(()-> new AdminNotFoundByIdentificaçãoException(identificação));
+    public AdminUser atualizarAdmin(UUID identificacao, AdminUser adminUser){
+        AdminUser adminBanco = adminUserRepository.findByIdentificacao(identificacao)
+                .orElseThrow(()-> new AdminNotFoundByIdentificacaoException(identificacao));
 
         adminBanco.setEmail(adminUser.getEmail());
         adminBanco.setNome(adminUser.getNome());
@@ -38,7 +38,7 @@ public class AdminUserService {
 
     public Object removerAdmin(UUID identificacao){
         AdminUser admin = adminUserRepository.findByIdentificacao(identificacao)
-                .orElseThrow(() -> new AdminNotFoundByIdentificaçãoException(identificacao));
+                .orElseThrow(() -> new AdminNotFoundByIdentificacaoException(identificacao));
         adminUserRepository.delete(admin);
         return admin;
     }
@@ -46,14 +46,6 @@ public class AdminUserService {
     public List<AdminUser> listarAdmins(){
         return adminUserRepository.findAll();
     }
-
-
-    /// Clients
-    public ClientUser adicionarClient(ClientUser clientUser){
-        clientUser.setRole(Roles.CLIENTE);
-        return clientUserRepository.save(clientUser);
-    }
-
 
 
 }

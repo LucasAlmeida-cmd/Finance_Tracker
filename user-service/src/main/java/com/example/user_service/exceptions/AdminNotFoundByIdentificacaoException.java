@@ -1,0 +1,7 @@
+package com.example.user_service.exceptions;
+
+import java.util.UUID;
+
+public class AdminNotFoundByIdentificacaoException extends RuntimeException{
+    public AdminNotFoundByIdentificacaoException(UUID identificação){super("Administrador não encontrado com essa identificação: "+ identificação);}
+}
