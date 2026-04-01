@@ -1,9 +1,7 @@
 package com.example.user_service.service;
 
 import com.example.user_service.exceptions.AdminNotFoundByIdentificacaoException;
-import com.example.user_service.exceptions.UsuarioNotFoundByCpfException;
 import com.example.user_service.model.AdminUser;
-import com.example.user_service.model.ClientUser;
 import com.example.user_service.model.Roles;
 import com.example.user_service.repository.AdminUserRepository;
 import com.example.user_service.repository.ClientUserRepository;

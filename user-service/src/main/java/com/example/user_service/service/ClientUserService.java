@@ -7,6 +7,8 @@ import com.example.user_service.repository.ClientUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClientUserService {
 
@@ -22,12 +24,25 @@ public class ClientUserService {
     public ClientUser atualizarPorCpf(String cpf, ClientUser cliente) {
         ClientUser clienteBanco = repository.findByCpf(cpf)
                 .orElseThrow(() -> new UsuarioNotFoundByCpfException(cpf));
-
         clienteBanco.setCpf(cliente.getCpf());
         clienteBanco.setEmail(cliente.getEmail());
         clienteBanco.setDataAniversario(cliente.getDataAniversario());
         clienteBanco.setNome(cliente.getNome());
 
         return repository.save(clienteBanco);
+    }
+
+
+
+    public void removerClientPorCpf(String cpf){
+        String cpfNumerico = cpf.replaceAll("[^0-9]", "");
+        ClientUser clienteBanco = repository.findByCpf(cpfNumerico)
+                .orElseThrow(()-> new UsuarioNotFoundByCpfException(cpf));
+        repository.deleteByCpf(cpfNumerico);
+    }
+
+
+    public List<ClientUser> listarClients() {
+        return repository.findAll();
     }
 }

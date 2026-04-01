@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/user")
 public class ClientUserController {
@@ -21,10 +23,20 @@ public class ClientUserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping
-    @RequestMapping("/{cpf}")
+    @GetMapping
+    public ResponseEntity<List<ClientUser>> retornaClient(){
+        return ResponseEntity.ok(service.listarClients());
+    }
+
+    @PutMapping("/{cpf}")
     public ResponseEntity<ClientUser> updateClient(@PathVariable String cpf, @RequestBody ClientUser usuario){
         String cpfLimpo = cpf.replaceAll("[^0-9]", "");
         return ResponseEntity.ok(service.atualizarPorCpf(cpfLimpo, usuario));
+    }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<ClientUser> deleteClient(@PathVariable String cpf){
+        service.removerClientPorCpf(cpf);
+        return ResponseEntity.noContent().build();
     }
 }

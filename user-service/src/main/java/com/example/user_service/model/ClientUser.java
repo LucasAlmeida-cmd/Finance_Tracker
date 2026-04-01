@@ -6,10 +6,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +16,7 @@ import java.util.UUID;
 @Setter
 @DiscriminatorValue("CLIENTE")
 @PrimaryKeyJoinColumn(name = "id_cliente", referencedColumnName = "id")
-public class    ClientUser extends User {
+public class ClientUser extends User {
 
     @Column(name = "cpf_user", nullable = false, length = 100, unique = true)
     private String cpf;

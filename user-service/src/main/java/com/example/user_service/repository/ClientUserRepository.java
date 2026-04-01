@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface ClientUserRepository extends JpaRepository<ClientUser,UUID > {
 
     Optional<ClientUser> findByCpf(String cpf);
+
+    void deleteByCpf(String cpf);
 }
