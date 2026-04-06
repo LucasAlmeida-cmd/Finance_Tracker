@@ -21,7 +21,7 @@ public class AdminUserController {
     @PostMapping
     public ResponseEntity<AdminUser> addAdmin(@RequestBody AdminUser adminUser){
         AdminUser admin = service.adicionarAdmin(adminUser);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(admin);
     }
 
     @GetMapping
