@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientCadastroDTO {
+public class ClientDTO {
 
     @NotBlank(message = "O nome é obrigatório.")
     private String nome;

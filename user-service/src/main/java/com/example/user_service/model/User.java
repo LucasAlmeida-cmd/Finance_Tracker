@@ -29,7 +29,7 @@ public abstract class User implements UserDetails {
     @Column(name = "nome_user", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "email_user", nullable = false, length = 100)
+    @Column(name = "email_user", nullable = false, length = 100, unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)

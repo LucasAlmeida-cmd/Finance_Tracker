@@ -1,7 +1,9 @@
 package com.example.user_service.controller;
 
+import com.example.user_service.DTOs.AdminDTO;
 import com.example.user_service.model.AdminUser;
 import com.example.user_service.service.AdminUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,7 @@ public class AdminUserController {
     AdminUserService service;
 
     @PostMapping
-    public ResponseEntity<AdminUser> addAdmin(@RequestBody AdminUser adminUser){
+    public ResponseEntity<AdminUser> addAdmin(@RequestBody @Valid AdminDTO adminUser){
         AdminUser admin = service.adicionarAdmin(adminUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(admin);
     }
@@ -30,7 +32,7 @@ public class AdminUserController {
     }
 
     @PutMapping("/{identificacao}")
-    public ResponseEntity<AdminUser> updateAdmin(@PathVariable UUID identificacao,@RequestBody AdminUser adminUser){
+    public ResponseEntity<AdminUser> updateAdmin(@PathVariable UUID identificacao,@RequestBody @Valid AdminDTO adminUser){
         return ResponseEntity.ok(service.atualizarAdmin(identificacao, adminUser));
     }
 

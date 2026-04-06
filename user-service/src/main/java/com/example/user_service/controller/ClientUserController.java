@@ -1,6 +1,6 @@
 package com.example.user_service.controller;
 
-import com.example.user_service.DTOs.ClientCadastroDTO;
+import com.example.user_service.DTOs.ClientDTO;
 import com.example.user_service.model.ClientUser;
 import com.example.user_service.service.ClientUserService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class ClientUserController {
     ClientUserService service;
 
     @PostMapping
-    public ResponseEntity<ClientUser> addClient(@RequestBody @Valid ClientCadastroDTO cliente){
+    public ResponseEntity<ClientUser> addClient(@RequestBody @Valid ClientDTO cliente){
         ClientUser client = service.adicionar(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(client);
     }
@@ -31,7 +31,7 @@ public class ClientUserController {
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<ClientUser> updateClient(@PathVariable String cpf, @RequestBody ClientUser usuario){
+    public ResponseEntity<ClientUser> updateClient(@PathVariable String cpf, @RequestBody @Valid ClientDTO usuario){
         String cpfLimpo = cpf.replaceAll("[^0-9]", "");
         return ResponseEntity.ok(service.atualizarPorCpf(cpfLimpo, usuario));
     }

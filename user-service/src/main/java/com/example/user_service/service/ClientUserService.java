@@ -1,6 +1,6 @@
 package com.example.user_service.service;
 
-import com.example.user_service.DTOs.ClientCadastroDTO;
+import com.example.user_service.DTOs.ClientDTO;
 import com.example.user_service.exceptions.UsuarioNotFoundByCpfException;
 import com.example.user_service.mappers.UserMapper;
 import com.example.user_service.model.ClientUser;
@@ -25,14 +25,14 @@ public class ClientUserService {
     private UserMapper mapper;
 
 
-    public ClientUser adicionar(@Valid ClientCadastroDTO clientDTO){
+    public ClientUser adicionar(@Valid ClientDTO clientDTO){
         ClientUser cliente = mapper.toEntity(clientDTO);
         cliente.setRole(Roles.CLIENTE);
         cliente.setSenha(passwordEncoder.encode(clientDTO.getSenha()));
         return repository.save(cliente);
     }
 
-    public ClientUser atualizarPorCpf(String cpf, ClientUser cliente) {
+    public ClientUser atualizarPorCpf(String cpf,@Valid ClientDTO cliente) {
         ClientUser clienteBanco = repository.findByCpf(cpf)
                 .orElseThrow(() -> new UsuarioNotFoundByCpfException(cpf));
         clienteBanco.setCpf(cliente.getCpf());

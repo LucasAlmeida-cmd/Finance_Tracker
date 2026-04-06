@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/login").permitAll();;
-                    auth.requestMatchers(HttpMethod.POST, "/user").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/user", "/admin").permitAll();
                     auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/v3/api-docs.yaml").permitAll();
                     auth.requestMatchers("/error").permitAll();
 
@@ -83,10 +83,10 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.PUT, "/user/**").authenticated();
 
 
-                    auth.requestMatchers(HttpMethod.POST, "/admin").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.GET, "/admin").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN");
-                    auth.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
+                    auth.requestMatchers( "/admin/**").hasRole("ADMIN");
+//                    auth.requestMatchers(HttpMethod.GET, "/admin").hasRole("ADMIN");
+//                    auth.requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN");
+//                    auth.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
 
                     auth.anyRequest().authenticated();
                 })
