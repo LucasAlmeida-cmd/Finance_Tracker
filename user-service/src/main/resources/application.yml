@@ -6,8 +6,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/finance_tracker
     username: postgres
     password: admin
-
-
+    dbcp2:
+      enable-auto-commit-on-return:
 
   mvc:
     hiddenmethod:
@@ -27,3 +27,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
+api:
+  security:
+    token:
+      secret: "sua-chave-secreta-muito-longa-com-pelo-menos-32-caracteres" # Adicionei o 'secret:' aqui
+
