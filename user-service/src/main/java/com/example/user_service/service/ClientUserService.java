@@ -18,7 +18,9 @@ public class ClientUserService {
 
 
     public ClientUser adicionar(ClientUser cliente){
+        String cpfLimpo = cliente.getCpf().replaceAll("[^0-9]", "");
         cliente.setRole(Roles.CLIENTE);
+        cliente.setCpf(cpfLimpo);
         return repository.save(cliente);
     }
 

@@ -7,13 +7,15 @@ spring:
     username: postgres
     password: admin
 
+
+
   mvc:
     hiddenmethod:
       filter:
         enabled: true
 
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
     baseline-on-migrate: true
 

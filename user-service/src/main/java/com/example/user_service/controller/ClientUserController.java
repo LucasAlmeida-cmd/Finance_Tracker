@@ -2,6 +2,7 @@ package com.example.user_service.controller;
 
 import com.example.user_service.model.ClientUser;
 import com.example.user_service.service.ClientUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,9 @@ public class ClientUserController {
     ClientUserService service;
 
     @PostMapping
-    public ResponseEntity<ClientUser> addClient(@RequestBody ClientUser cliente){
+    public ResponseEntity<ClientUser> addClient(@RequestBody @Valid ClientUser cliente){
         ClientUser client = service.adicionar(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(client);
     }
 
     @GetMapping
