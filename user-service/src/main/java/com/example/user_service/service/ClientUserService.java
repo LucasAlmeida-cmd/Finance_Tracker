@@ -1,11 +1,15 @@
 package com.example.user_service.service;
 
+import com.example.user_service.DTOs.ClientCadastroDTO;
 import com.example.user_service.exceptions.UsuarioNotFoundByCpfException;
+import com.example.user_service.mappers.UserMapper;
 import com.example.user_service.model.ClientUser;
 import com.example.user_service.model.Roles;
 import com.example.user_service.repository.ClientUserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +19,16 @@ public class ClientUserService {
 
     @Autowired
     private ClientUserRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserMapper mapper;
 
 
-    public ClientUser adicionar(ClientUser cliente){
-        String cpfLimpo = cliente.getCpf().replaceAll("[^0-9]", "");
+    public ClientUser adicionar(@Valid ClientCadastroDTO clientDTO){
+        ClientUser cliente = mapper.toEntity(clientDTO);
         cliente.setRole(Roles.CLIENTE);
-        cliente.setCpf(cpfLimpo);
+        cliente.setSenha(passwordEncoder.encode(clientDTO.getSenha()));
         return repository.save(cliente);
     }
 

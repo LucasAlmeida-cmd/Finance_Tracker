@@ -1,5 +1,6 @@
 package com.example.user_service.controller;
 
+import com.example.user_service.DTOs.ClientCadastroDTO;
 import com.example.user_service.model.ClientUser;
 import com.example.user_service.service.ClientUserService;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ public class ClientUserController {
     ClientUserService service;
 
     @PostMapping
-    public ResponseEntity<ClientUser> addClient(@RequestBody @Valid ClientUser cliente){
+    public ResponseEntity<ClientUser> addClient(@RequestBody @Valid ClientCadastroDTO cliente){
         ClientUser client = service.adicionar(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(client);
     }
