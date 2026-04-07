@@ -1,4 +1,4 @@
-package com.example.transaction_service.DTOs;
+package com.example.transaction_service.dtos;
 
 import com.example.transaction_service.enums.TransactionType;
 import jakarta.validation.constraints.NotBlank;
