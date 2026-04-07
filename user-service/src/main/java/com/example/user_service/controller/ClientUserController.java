@@ -1,18 +1,20 @@
 package com.example.user_service.controller;
 
 import com.example.user_service.DTOs.ClientDTO;
+import com.example.user_service.DTOs.ClientUpdateDTO;
 import com.example.user_service.model.ClientUser;
 import com.example.user_service.service.ClientUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class ClientUserController {
 
@@ -31,13 +33,15 @@ public class ClientUserController {
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<ClientUser> updateClient(@PathVariable String cpf, @RequestBody @Valid ClientDTO usuario){
+    @PreAuthorize("hasRole('ADMIN') or #cpf == authentication.principal.cpf")
+    public ResponseEntity<ClientUser> updateClient(@PathVariable String cpf, @RequestBody @Valid ClientUpdateDTO usuario){
         String cpfLimpo = cpf.replaceAll("[^0-9]", "");
         return ResponseEntity.ok(service.atualizarPorCpf(cpfLimpo, usuario));
     }
 
     @DeleteMapping("/{cpf}")
-    public ResponseEntity<ClientUser> deleteClient(@PathVariable String cpf){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteClient(@PathVariable String cpf){
         service.removerClientPorCpf(cpf);
         return ResponseEntity.noContent().build();
     }

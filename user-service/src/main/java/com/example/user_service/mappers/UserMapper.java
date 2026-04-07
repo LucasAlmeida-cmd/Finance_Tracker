@@ -8,6 +8,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    ClientUser toEntity(ClientDTO dto);
-    AdminUser toEnity(AdminDTO dto);
+    ClientUser fromClientDTO(ClientDTO dto);
+    AdminUser fromAdminDTO(AdminDTO dto);
 }

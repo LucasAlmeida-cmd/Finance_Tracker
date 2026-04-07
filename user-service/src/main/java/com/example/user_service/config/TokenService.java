@@ -28,7 +28,7 @@ public class TokenService {
 
         return Jwts.builder()
                 .setIssuer("API")
-                .setSubject(usuario.getEmail())
+                .setSubject(usuario.getId().toString())
                 .setIssuedAt(Date.from(agora))
                 .setExpiration(Date.from(expiracao))
                 .signWith(chave, SignatureAlgorithm.HS256)

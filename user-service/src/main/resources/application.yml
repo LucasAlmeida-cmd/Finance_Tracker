@@ -31,5 +31,7 @@ spring:
 api:
   security:
     token:
-      secret: "sua-chave-secreta-muito-longa-com-pelo-menos-32-caracteres" # Adicionei o 'secret:' aqui
+      secret: "sua-chave-secreta-muito-longa-com-pelo-menos-32-caracteres" # Adicionei o 'secret:'
+
+
 

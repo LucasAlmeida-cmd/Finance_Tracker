@@ -25,7 +25,7 @@ public class AdminUserService {
     private PasswordEncoder passwordEncoder;
 
     public AdminUser adicionarAdmin(@Valid AdminDTO adminDTO){
-        AdminUser adminUser = mapper.toEnity(adminDTO);
+        AdminUser adminUser = mapper.fromAdminDTO(adminDTO);
         adminUser.setRole(Roles.ADMIN);
         adminUser.setIdentificacao(UUID.randomUUID());
         adminUser.setSenha(passwordEncoder.encode(adminDTO.getSenha()));
@@ -41,11 +41,10 @@ public class AdminUserService {
         return adminUserRepository.save(adminBanco);
     }
 
-    public Object removerAdmin(UUID identificacao){
+    public void removerAdmin(UUID identificacao){
         AdminUser admin = adminUserRepository.findByIdentificacao(identificacao)
                 .orElseThrow(() -> new AdminNotFoundByIdentificacaoException(identificacao));
         adminUserRepository.delete(admin);
-        return admin;
     }
 
     public List<AdminUser> listarAdmins(){

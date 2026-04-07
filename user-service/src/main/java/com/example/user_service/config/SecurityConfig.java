@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -73,20 +75,23 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/login").permitAll();;
-                    auth.requestMatchers(HttpMethod.POST, "/user", "/admin").permitAll();
+
+                    auth.requestMatchers("/", "/error").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/login").permitAll();
+
+
+                    auth.requestMatchers(HttpMethod.POST, "/user").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/admin").permitAll();
+
+
                     auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/v3/api-docs.yaml").permitAll();
-                    auth.requestMatchers("/error").permitAll();
 
 
-                    auth.requestMatchers(HttpMethod.PUT, "/user/**").authenticated();
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
 
 
-                    auth.requestMatchers( "/admin/**").hasRole("ADMIN");
-//                    auth.requestMatchers(HttpMethod.GET, "/admin").hasRole("ADMIN");
-//                    auth.requestMatchers(HttpMethod.PUT, "/admin/**").hasRole("ADMIN");
-//                    auth.requestMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN");
+                    auth.requestMatchers("/user/**").authenticated();
+
 
                     auth.anyRequest().authenticated();
                 })
