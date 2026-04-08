@@ -1,23 +1,14 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
+  application:
+    name: user-service
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/finance_tracker
+    url: jdbc:postgresql://postgres-db:5432/finance_tracker
     username: postgres
     password: admin
-    dbcp2:
-      enable-auto-commit-on-return:
-
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
-
-  flyway:
-    enabled: false
-    locations: classpath:db/migration
-    baseline-on-migrate: true
 
   jpa:
     hibernate:
@@ -28,10 +19,5 @@ spring:
         format_sql: true
     show-sql: true
 
-api:
-  security:
-    token:
-      secret: "sua-chave-secreta-muito-longa-com-pelo-menos-32-caracteres" # Adicionei o 'secret:'
-
-
-
+  flyway:
+    enabled: false

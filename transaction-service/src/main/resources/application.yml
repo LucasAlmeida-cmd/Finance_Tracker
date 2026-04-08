@@ -1,20 +1,23 @@
+server:
+  port: 8082
 spring:
+  application:
+    name: transaction-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/transaction_db
+    url: jdbc:postgresql://postgres-db:5432/finance_tracker
     username: postgres
-    password: postgres
+    password: admin
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:29092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
-server:
-  port: 8082
-
-jwt:
-  secret: sua-chave-secreta-igual-ao-user-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://user-service:8081/.well-known/jwks.json

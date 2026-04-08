@@ -1,15 +1,17 @@
-package com.example.transaction_service.dtos;
+package com.example.notification_service.dto;
 
-import com.example.transaction_service.enums.TransactionType;
-import lombok.Builder;
+import com.example.notification_service.enums.TransactionType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionEventDTO {
     private UUID transactionId;
     private UUID userId;
@@ -18,4 +20,3 @@ public class TransactionEventDTO {
     private String category;
     private LocalDate date;
 }
-

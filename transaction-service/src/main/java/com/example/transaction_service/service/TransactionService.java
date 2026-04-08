@@ -3,6 +3,7 @@ package com.example.transaction_service.service;
 import com.example.transaction_service.dtos.TransactionEventDTO;
 import com.example.transaction_service.dtos.TransactionRequestDTO;
 import com.example.transaction_service.dtos.TransactionResponseDTO;
+import com.example.transaction_service.exception.TransactionNotFoundException;
 import com.example.transaction_service.repository.TransactionRepository;
 import com.example.transaction_service.entity.Transaction;
 import lombok.RequiredArgsConstructor;

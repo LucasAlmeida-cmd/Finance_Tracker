@@ -20,7 +20,6 @@ public class TransactionController {
 
     private final TransactionService service;
 
-    // extrai o userId do JWT via SecurityContext
     private UUID getCurrentUserId() {
         return UUID.fromString(
                 SecurityContextHolder.getContext().getAuthentication().getName()

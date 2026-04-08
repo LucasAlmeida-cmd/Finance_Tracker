@@ -3,12 +3,11 @@ package com.example.user_service.config;
 import com.example.user_service.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -17,12 +16,13 @@ import java.util.Date;
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret}")
-    private String secret;
+    @Autowired
+    private RSAPrivateKey privateKey;
+
+    @Autowired
+    private RSAPublicKey publicKey;
 
     public String gerarToken(User usuario) {
-        SecretKey chave = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-
         Instant agora = Instant.now();
         Instant expiracao = getDataExpiracao().toInstant(ZoneOffset.of("-03:00"));
 
@@ -31,16 +31,14 @@ public class TokenService {
                 .setSubject(usuario.getId().toString())
                 .setIssuedAt(Date.from(agora))
                 .setExpiration(Date.from(expiracao))
-                .signWith(chave, SignatureAlgorithm.HS256)
+                .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
     }
 
     public String getSubject(String tokenJWT) {
-        SecretKey chave = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(chave)
+                    .setSigningKey(publicKey)
                     .build()
                     .parseClaimsJws(tokenJWT)
                     .getBody()

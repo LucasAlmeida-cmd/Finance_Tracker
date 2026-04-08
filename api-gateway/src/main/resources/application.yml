@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Rota para o User Service
+        - id: user-service
+          uri: http://user-service:8081
+          predicates:
+            - Path=/api/users/**, /auth/**, /.well-known/jwks.json
+
+        # Rota para o Transaction Service
+        - id: transaction-service
+          uri: http://transaction-service:8082
+          predicates:
+            - Path=/api/transactions/**
+
+        # Rota para o Notification Service
+        - id: notification-service
+          uri: http://notification-service:8083
+          predicates:
+            - Path=/api/notifications/**
