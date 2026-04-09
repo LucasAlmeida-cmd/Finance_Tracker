@@ -77,10 +77,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
 
                     auth.requestMatchers("/", "/error").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/auth").permitAll();
 
 
-                    auth.requestMatchers(HttpMethod.POST, "/user").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/users").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/admin").permitAll();
 
 
@@ -90,7 +90,8 @@ public class SecurityConfig {
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
 
 
-                    auth.requestMatchers("/user/**").authenticated();
+
+                    auth.requestMatchers("/api/users").authenticated();
 
 
                     auth.anyRequest().authenticated();
