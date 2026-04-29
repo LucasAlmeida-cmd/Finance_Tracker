@@ -91,7 +91,7 @@ public class SecurityConfig {
 
 
 
-                    auth.requestMatchers("/api/users").authenticated();
+                    auth.requestMatchers("/api/users/**").authenticated();
 
 
                     auth.anyRequest().authenticated();

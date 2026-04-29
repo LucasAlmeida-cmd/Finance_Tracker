@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,14 +31,14 @@ public class ClientUserController {
         return ResponseEntity.ok(service.listarClients());
     }
 
-    @PutMapping("/{cpf}")
-    @PreAuthorize("hasRole('ADMIN') or #cpf == authentication.principal.cpf")
+    @PutMapping("/{cpf:.+}")
+    @PreAuthorize("hasRole('ADMIN') or @securityUtils.cpfConfere(#cpf, authentication.principal.cpf)")
     public ResponseEntity<ClientUser> updateClient(@PathVariable String cpf, @RequestBody @Valid ClientUpdateDTO usuario){
         String cpfLimpo = cpf.replaceAll("[^0-9]", "");
         return ResponseEntity.ok(service.atualizarPorCpf(cpfLimpo, usuario));
     }
 
-    @DeleteMapping("/{cpf}")
+    @DeleteMapping("/{cpf:.+}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteClient(@PathVariable String cpf){
         service.removerClientPorCpf(cpf);
