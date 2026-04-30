@@ -33,8 +33,6 @@ public class TransactionService {
                 .build();
 
         Transaction saved = repository.save(transaction);
-
-        // publica evento no Kafka após salvar
         publishEvent(saved);
 
         return toResponseDTO(saved);

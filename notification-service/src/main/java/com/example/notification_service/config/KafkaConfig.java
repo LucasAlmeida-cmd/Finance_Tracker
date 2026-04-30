@@ -1,38 +1,45 @@
 package com.example.notification_service.config;
 
 import com.example.notification_service.dto.TransactionEventDTO;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JacksonJsonDeserializer; // ✅ novo
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class KafkaConsumerConfig {
+@EnableKafka
+public class KafkaConfig {
 
     @Bean
     public ConsumerFactory<String, TransactionEventDTO> consumerFactory() {
-        Map<String, Object> config = new HashMap<>();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
 
-        // ✅ JacksonJsonDeserializer substitui o JsonDeserializer depreciado
-        JacksonJsonDeserializer<TransactionEventDTO> deserializer =
-                new JacksonJsonDeserializer<>(TransactionEventDTO.class);
-        deserializer.trustedPackages("*");
+        JsonDeserializer<TransactionEventDTO> jsonDeserializer =
+                new JsonDeserializer<>(TransactionEventDTO.class, mapper, false);
+
+        jsonDeserializer.addTrustedPackages("*");
+
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:29092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return new DefaultKafkaConsumerFactory<>(
-                config,
+                props,
                 new StringDeserializer(),
-                deserializer
+                new ErrorHandlingDeserializer<>(jsonDeserializer)
         );
     }
 

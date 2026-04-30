@@ -78,7 +78,7 @@ public class SecurityConfig {
 
                     auth.requestMatchers("/", "/error").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/auth").permitAll();
-
+                    auth.requestMatchers("/.well-known/jwks.json").permitAll();
 
                     auth.requestMatchers(HttpMethod.POST, "/api/users").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/admin").permitAll();

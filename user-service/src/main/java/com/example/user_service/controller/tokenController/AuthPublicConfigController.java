@@ -21,8 +21,8 @@ public class AuthPublicConfigController {
                 "keys", List.of(
                         Map.of(
                                 "kty", "RSA",
-                                "n", Base64.getUrlEncoder().encodeToString(publicKey.getModulus().toByteArray()),
-                                "e", Base64.getUrlEncoder().encodeToString(publicKey.getPublicExponent().toByteArray()),
+                                "n", Base64.getUrlEncoder().withoutPadding().encodeToString(publicKey.getModulus().toByteArray()),
+                                "e", Base64.getUrlEncoder().withoutPadding().encodeToString(publicKey.getPublicExponent().toByteArray()),
                                 "alg", "RS256",
                                 "use", "sig"
                         )

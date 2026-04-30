@@ -12,18 +12,11 @@ spring:
       ddl-auto: update
     show-sql: true
   kafka:
+    # Nome do serviço e porta interna definidos no docker-compose
     bootstrap-servers: kafka:29092
-    consumer:
-      group-id: notification-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      properties:
-        spring.json.trusted.packages: "*"
-        spring.json.value.default.type: com.example.notification_service.dto.TransactionEventDTO
-
   security:
     oauth2:
       resourceserver:
         jwt:
+          # Comunicação interna via nome do container
           jwk-set-uri: http://user-service:8081/.well-known/jwks.json

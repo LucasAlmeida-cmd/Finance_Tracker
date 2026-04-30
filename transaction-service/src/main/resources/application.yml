@@ -12,12 +12,14 @@ spring:
       ddl-auto: update
     show-sql: true
   kafka:
-    bootstrap-servers: kafka:29092
     producer:
+      # Nome do serviço e porta interna definidos no docker-compose
+      bootstrap-servers: kafka:29092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   security:
     oauth2:
       resourceserver:
         jwt:
+          # Comunicação interna via nome do container
           jwk-set-uri: http://user-service:8081/.well-known/jwks.json
