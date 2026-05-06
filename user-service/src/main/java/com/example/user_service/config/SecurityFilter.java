@@ -3,6 +3,7 @@ package com.example.user_service.config;
 import com.example.user_service.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie; // Importante!
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (tokenJWT != null) {
             try {
                 var subject = tokenService.getSubject(tokenJWT);
+                // Verifique se o seu ID no banco é realmente UUID.
+                // Se for Long, use Long.parseLong(subject)
                 UUID userId = UUID.fromString(subject);
                 var usuario = usuarioRepository.findById(userId).orElse(null);
 
@@ -38,6 +41,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
+                // Se o token for inválido ou o ID não for UUID, limpamos o contexto
                 SecurityContextHolder.clearContext();
             }
         }
@@ -46,6 +50,16 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private String recuperarToken(HttpServletRequest request) {
+        // 1. Tenta buscar o token no Cookie
+        if (request.getCookies() != null) {
+            for (var cookie : request.getCookies()) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        // 2. Fallback para Header (útil para testes rápidos)
         var authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             return authorizationHeader.replace("Bearer ", "").trim();

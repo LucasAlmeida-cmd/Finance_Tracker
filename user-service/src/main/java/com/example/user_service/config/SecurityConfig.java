@@ -1,7 +1,6 @@
 package com.example.user_service.config;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -29,10 +29,7 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private SecurityFilter securityFilter;
-
-
+    private final SecurityFilter securityFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -47,9 +44,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -60,39 +57,31 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(
-                "/",
                 "/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/swagger-ui.html"
         );
     }
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 
-                    auth.requestMatchers("/", "/error").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/auth").permitAll();
-                    auth.requestMatchers("/.well-known/jwks.json").permitAll();
-
+                    auth.requestMatchers("/", "/error", "/.well-known/jwks.json").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/users/auth").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/users").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/admin").permitAll();
 
-
                     auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/v3/api-docs.yaml").permitAll();
-
 
                     auth.requestMatchers("/admin/**").hasRole("ADMIN");
 
-
-
                     auth.requestMatchers("/api/users/**").authenticated();
-
 
                     auth.anyRequest().authenticated();
                 })
