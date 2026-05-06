@@ -1,12 +1,14 @@
 package com.example.user_service.controller.autenticacao;
 
 import com.example.user_service.DTOs.LoginRequestDTO;
-import com.example.user_service.DTOs.TokenResponseDTO;
+import com.example.user_service.DTOs.UserResponse;
 import com.example.user_service.config.TokenService;
 import com.example.user_service.model.User;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/users/auth")
 public class AutenticacaoController {
 
     @Autowired
@@ -31,7 +33,19 @@ public class AutenticacaoController {
     public ResponseEntity efetuarLogin(@RequestBody @Valid LoginRequestDTO dados) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.getEmail(), dados.getSenha());
         var authentication = manager.authenticate(authenticationToken);
-        var tokenJWT = tokenService.gerarToken((User) authentication.getPrincipal());
-        return ResponseEntity.ok(new TokenResponseDTO(tokenJWT));
+        var usuario = (User) authentication.getPrincipal();
+        var tokenJWT = tokenService.gerarToken(usuario);
+
+        ResponseCookie cookie = ResponseCookie.from("accessToken", tokenJWT)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(86400)
+                .sameSite("Lax")
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new UserResponse(usuario.getEmail(), usuario.getNome()));
     }
 }

@@ -67,14 +67,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Ativa o CORS com a config acima
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 
                     auth.requestMatchers("/", "/error", "/.well-known/jwks.json").permitAll();
-
-                    auth.requestMatchers(HttpMethod.POST, "/api/users/auth", "/auth", "/api/users/login").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/api/users/auth").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/users").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/admin").permitAll();
 
