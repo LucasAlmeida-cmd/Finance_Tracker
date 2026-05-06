@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api/users/auth")
+@RequestMapping("/api/users")
 public class AutenticacaoController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class AutenticacaoController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping
+    @PostMapping("/auth")
     public ResponseEntity efetuarLogin(@RequestBody @Valid LoginRequestDTO dados) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.getEmail(), dados.getSenha());
         var authentication = manager.authenticate(authenticationToken);
@@ -47,5 +47,20 @@ public class AutenticacaoController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new UserResponse(usuario.getEmail(), usuario.getNome()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        ResponseCookie cookie = ResponseCookie.from("accessToken", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .build();
     }
 }
